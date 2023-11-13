@@ -21,7 +21,7 @@ pub async fn is_even<T: std::fmt::Display>(n: T) -> anyhow::Result<bool> {
     } else if let Some(error) = res.error {
         Err(anyhow::anyhow!(error))
     } else {
-        panic!("Unknown response from isEven api. Is it under maintainance?");
+        panic!("Unknown response from isEven api. Is it under maintenance?");
     }
 }
 

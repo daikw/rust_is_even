@@ -1,3 +1,5 @@
+use thiserror::Error;
+
 extern crate anyhow;
 extern crate reqwest;
 extern crate serde_json;
@@ -12,14 +14,23 @@ struct IsEvenResult {
     error: Option<String>,
 }
 
-pub async fn is_even<T: std::fmt::Display>(n: T) -> anyhow::Result<bool> {
+
+#[derive(Error, Debug)]
+pub enum IsEvenError {
+    #[error("request failed")]
+    Reqwest(#[from] reqwest::Error),
+    #[error("API returned error")]
+    APIError {message: String}
+}
+
+pub async fn is_even<T: std::fmt::Display>(n: T) -> Result<bool, IsEvenError> {
     let url = format!("{}{}", EP, n);
     let res = reqwest::get(url).await?.json::<IsEvenResult>().await?;
 
     if let Some(is_even) = res.is_even {
         Ok(is_even)
     } else if let Some(error) = res.error {
-        Err(anyhow::anyhow!(error))
+        Err(IsEvenError::APIError { message: error })
     } else {
         panic!("Unknown response from isEven api. Is it under maintenance?");
     }

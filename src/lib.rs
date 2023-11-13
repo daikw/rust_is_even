@@ -8,7 +8,7 @@ const EP: &str = "https://api.isevenapi.xyz/api/iseven/";
 #[derive(serde::Deserialize)]
 struct IsEvenResult {
     ad: Option<String>,
-    iseven: Option<bool>,
+    is_even: Option<bool>,
     error: Option<String>,
 }
 
@@ -16,8 +16,8 @@ pub async fn is_even<T: std::fmt::Display>(n: T) -> anyhow::Result<bool> {
     let url = format!("{}{}", EP, n);
     let res = reqwest::get(url).await?.json::<IsEvenResult>().await?;
 
-    if let Some(iseven) = res.iseven {
-        Ok(iseven)
+    if let Some(is_even) = res.is_even {
+        Ok(is_even)
     } else if let Some(error) = res.error {
         Err(anyhow::anyhow!(error))
     } else {

@@ -19,7 +19,7 @@ struct IsEvenResult {
 pub enum IsEvenError {
     #[error("request failed")]
     Reqwest(#[from] reqwest::Error),
-    #[error("API returned error")]
+    #[error("API returned error: {message:?}")]
     APIError { message: String },
 }
 

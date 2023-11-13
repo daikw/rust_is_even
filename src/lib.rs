@@ -29,11 +29,11 @@ pub async fn is_even<T: std::fmt::Display>(n: T) -> anyhow::Result<bool> {
 mod tests {
     use super::*;
 
-    #[test]
-    fn it_works() {
-        assert_eq!(is_even(1), false);
-        assert_eq!(is_even(2), true);
-        assert_eq!(is_even(42), true);
-        assert_eq!(is_even(43), false);
+    #[tokio::test]
+    async fn it_works() {
+        assert!(!is_even(1).await.unwrap());
+        assert!(is_even(2).await.unwrap());
+        assert!(is_even(42).await.unwrap());
+        assert!(!is_even(43).await.unwrap());
     }
 }
